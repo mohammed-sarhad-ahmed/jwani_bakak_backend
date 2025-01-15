@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
-import costSchema from "./cost";
 
-const transactionSchema = new mongoose.Schema(
+const buyTransactionSchema = new mongoose.Schema(
   {
     transactionType: {
       type: String,
-      required: [true, "you must provide the transaction type"],
-      enum: ["buy", "sell"],
+      required: [true, "you must specify the type of transaction"],
+      enum: ["buy"],
     },
     companyId: {
       type: mongoose.Types.ObjectId,
@@ -23,7 +22,9 @@ const transactionSchema = new mongoose.Schema(
       required: [true, "the quantity must be provided"],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-export default mongoose.model("Transaction", transactionSchema);
+export default mongoose.model("BuyTransaction", buyTransactionSchema);
