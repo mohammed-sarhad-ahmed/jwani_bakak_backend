@@ -9,11 +9,13 @@ const buyTransactionSchema = new mongoose.Schema(
     },
     companyId: {
       type: mongoose.Types.ObjectId,
-      required: [true, "you must provide an companyId"],
+      ref: "Company",
+      required: [true, "you must provide a companyId"],
     },
     productId: {
       type: mongoose.Types.ObjectId,
-      required: [true, "you must provide an productId"],
+      ref: "Product",
+      required: [true, "you must provide a productId"],
     },
     costPerUnit: costSchema,
     otherExpenses: [costSchema],

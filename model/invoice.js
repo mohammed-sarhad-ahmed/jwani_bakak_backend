@@ -4,10 +4,12 @@ const invoiceSchema = new mongoose.Schema(
   {
     companyId: {
       type: mongoose.Types.ObjectId,
+      ref: "Company",
       required: [true, "you must provide an companyId"],
     },
     productId: {
       type: mongoose.Types.ObjectId,
+      ref: "Product",
       required: [true, "you must provide an productId"],
     },
   },

@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema(
     },
     companyId: {
       type: mongoose.Types.ObjectId,
+      ref: "Company",
       required: [true, "the brand for the product must be specified"],
     },
   },
