@@ -19,7 +19,7 @@ app.all("*", (req, res) => {
 const databasePort = process.env.DATABASEPORT;
 const databaseAddress = process.env.DATABASEADDRESS;
 console.log(databaseAddress, databasePort);
-await mongoose.connect(`mongodb://localhost:27017/pricive`);
+await mongoose.connect(`mongodb://localhost:27017/jwani_balak`);
 
 app.listen(8080, () => {
   console.log("server has started at port 8080");
