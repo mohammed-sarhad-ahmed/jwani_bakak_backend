@@ -10,6 +10,10 @@ const kleshSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: [true, "the brand for the product must be specified"],
     },
+    addressedTo: {
+      type: String,
+      required: [true, "provide the name of the person it is addressed to"],
+    },
   },
   {
     timestamps: true,
