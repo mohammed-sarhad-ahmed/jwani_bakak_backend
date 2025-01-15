@@ -1,3 +1,3 @@
 import mongoose from "mongoose";
 
-mongoose.Schema({});
+const brandSchema = new mongoose.Schema({});
