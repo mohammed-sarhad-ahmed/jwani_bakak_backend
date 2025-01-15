@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const productSchema = mongoose.Schema({
+const productSchema = new mongoose.Schema({
   productName: {
     type: String,
     required: [true, "the product must have a name"],
@@ -11,4 +11,4 @@ const productSchema = mongoose.Schema({
   },
 });
 
-export default new mongoose.model("Product", productSchema);
+export default mongoose.model("Product", productSchema);
