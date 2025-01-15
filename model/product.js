@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-mongoose.Schema({
+const productSchema = mongoose.Schema({
   productName: {
     type: String,
     required: [true, "the product must have a name"],
@@ -10,3 +10,5 @@ mongoose.Schema({
     required: [true, "the brand for the product must be specified"],
   },
 });
+
+export default new mongoose.model("Product", productSchema);
