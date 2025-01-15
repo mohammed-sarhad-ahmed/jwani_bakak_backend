@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
-const brandSchema = new mongoose.Schema(
+const companySchema = new mongoose.Schema(
   {
-    brandName: {
+    companyName: {
       type: String,
-      required: [true, "the brandName must be provided"],
+      required: [true, "the companyName must be provided"],
     },
     logoPath: {
       type: String,
-      required: [true, "you must provide a path to the brand logo"],
+      required: [true, "you must provide a path to the company logo"],
     },
     address: {
       type: String,
@@ -20,4 +20,4 @@ const brandSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Brand", brandSchema);
+export default mongoose.model("Company", companySchema);

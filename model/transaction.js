@@ -8,8 +8,14 @@ const transactionSchema = new mongoose.Schema(
       required: [true, "you must provide the transaction type"],
       enum: ["buy", "sell"],
     },
-    brandId: mongoose.Types.ObjectId,
-    productId: mongoose.Types.ObjectId,
+    companyId: {
+      type: mongoose.Types.ObjectId,
+      required: [true, "you must provide an companyId"],
+    },
+    productId: {
+      type: mongoose.Types.ObjectId,
+      required: [true, "you must provide an productId"],
+    },
     cost: costSchema,
     quantity: {
       type: Number,
