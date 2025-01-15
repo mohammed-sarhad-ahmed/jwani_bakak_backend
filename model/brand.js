@@ -10,8 +10,14 @@ const brandSchema = new mongoose.Schema(
       type: String,
       required: [true, "you must provide a path to the brand logo"],
     },
+    address: {
+      type: String,
+      required: [true, "the address of the company should be provided"],
+    },
   },
   {
     timestamps: true,
   }
 );
+
+export default mongoose.model("Brand", brandSchema);
