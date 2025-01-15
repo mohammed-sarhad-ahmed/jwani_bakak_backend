@@ -12,6 +12,10 @@ const invoiceSchema = new mongoose.Schema(
       ref: "Product",
       required: [true, "you must provide an productId"],
     },
+    addressedTo: {
+      type: String,
+      required: [true, "provide the name of the person it is addressed to"],
+    },
   },
   {
     timestamps: true,
