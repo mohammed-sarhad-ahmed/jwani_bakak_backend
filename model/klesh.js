@@ -16,3 +16,5 @@ const kleshSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+export default mongoose.model("Klesh", kleshSchema);
