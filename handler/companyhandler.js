@@ -41,8 +41,7 @@ export async function getCompanies(req, res) {
 
 export async function getCompany(req, res) {
   try {
-    const companyId = req.params.id;
-    const company = await CompanyModel.findById(companyId);
+    const company = await CompanyModel.findById(req.params.id);
     res.status(200).json({
       status: "success",
       data: {
@@ -59,8 +58,7 @@ export async function getCompany(req, res) {
 
 export async function deleteCompany(req, res) {
   try {
-    const companyId = req.params.id;
-    const company = await CompanyModel.findByIdAndDelete(companyId);
+    await CompanyModel.findByIdAndDelete(req.params.id);
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
@@ -72,11 +70,14 @@ export async function deleteCompany(req, res) {
 
 export async function updateCompany(req, res) {
   try {
-    const companyId = req.params.id;
-    const company = await CompanyModel.findByIdAndUpdate(companyId, req.body, {
-      runValidators: true,
-      new: true,
-    });
+    const company = await CompanyModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
     res.status(204).json(company);
   } catch (error) {
     res.status(400).json({

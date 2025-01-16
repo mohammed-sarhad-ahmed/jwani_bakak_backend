@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import ProductModel from "../model/product";
 
 export async function addProduct(req, res) {
