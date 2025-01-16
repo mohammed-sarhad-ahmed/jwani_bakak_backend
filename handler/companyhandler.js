@@ -3,7 +3,7 @@ import CompanyModel from "../model/company.js";
 export async function addCompany(req, res) {
   try {
     const { address, companyName, logoPath } = req.body;
-    const product = await CompanyModel.create({
+    const company = await CompanyModel.create({
       companyName,
       address,
       logoPath,
@@ -11,7 +11,7 @@ export async function addCompany(req, res) {
     res.status(200).json({
       status: "succuss",
       data: {
-        product,
+        company,
       },
     });
   } catch (error) {
@@ -24,11 +24,11 @@ export async function addCompany(req, res) {
 
 export async function getCompanies(req, res) {
   try {
-    const products = await CompanyModel.find();
+    const companies = await CompanyModel.find();
     res.status(200).json({
       status: "success",
       data: {
-        products,
+        companies,
       },
     });
   } catch (error) {
@@ -42,11 +42,11 @@ export async function getCompanies(req, res) {
 export async function getCompany(req, res) {
   try {
     const companyId = req.params.id;
-    const product = await CompanyModel.findById(companyId);
+    const company = await CompanyModel.findById(companyId);
     res.status(200).json({
       status: "success",
       data: {
-        product,
+        company,
       },
     });
   } catch (error) {
@@ -60,7 +60,7 @@ export async function getCompany(req, res) {
 export async function deleteCompany(req, res) {
   try {
     const companyId = req.params.id;
-    const product = await CompanyModel.findByIdAndDelete(companyId);
+    const company = await CompanyModel.findByIdAndDelete(companyId);
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
@@ -73,11 +73,11 @@ export async function deleteCompany(req, res) {
 export async function updateCompany(req, res) {
   try {
     const companyId = req.params.id;
-    const product = await CompanyModel.findByIdAndUpdate(companyId, req.body, {
+    const company = await CompanyModel.findByIdAndUpdate(companyId, req.body, {
       runValidators: true,
       new: true,
     });
-    res.status(204).json(product);
+    res.status(204).json(company);
   } catch (error) {
     res.status(400).json({
       status: "fail",
