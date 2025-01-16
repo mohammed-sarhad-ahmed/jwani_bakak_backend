@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
   {
-    companyId: {
+    company: {
       type: mongoose.Types.ObjectId,
       ref: "Company",
       required: [true, "you must provide an companyId"],
     },
-    productId: {
+    product: {
       type: mongoose.Types.ObjectId,
       ref: "Product",
       required: [true, "you must provide an productId"],

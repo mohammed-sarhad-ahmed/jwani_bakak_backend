@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "the product must have a name"],
     },
-    companyId: {
+    company: {
       type: mongoose.Types.ObjectId,
       ref: "Company",
       required: [true, "the brand for the product must be specified"],

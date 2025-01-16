@@ -12,6 +12,7 @@ export async function addTransaction(req, res) {
     } else if (eq.body.transactionType === "Buy") {
       transaction = await buyTransactionModel.create(req.body);
     }
+    await transaction.populate("company product");
     res.status(200).json({
       message: "success",
       data: {
@@ -28,7 +29,9 @@ export async function addTransaction(req, res) {
 
 export async function getTransactions(req, res) {
   try {
-    const transactions = await transactionModel.find();
+    const transactions = await transactionModel
+      .find()
+      .populate("company product");
     res.status(200).json({
       message: "success",
       data: {
@@ -44,7 +47,9 @@ export async function getTransactions(req, res) {
 }
 export async function getTransaction(req, res) {
   try {
-    const transaction = await transactionModel.findById(req.params.id);
+    const transaction = await transactionModel
+      .findById(req.params.id)
+      .populate("company product");
     res.status(200).json({
       message: "success",
       data: {
@@ -73,14 +78,12 @@ export async function deleteTransaction(req, res) {
 
 export async function updateTransaction(req, res) {
   try {
-    const transaction = await transactionModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
+    const transaction = await transactionModel
+      .findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
-      }
-    );
+      })
+      .populate("company product");
     res.status(200).json({
       message: "success",
       data: {

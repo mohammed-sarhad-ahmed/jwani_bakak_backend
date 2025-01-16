@@ -3,6 +3,7 @@ import KleshModel from "../model/klesh";
 export async function addKlesh(req, res) {
   try {
     const klesh = await KleshModel.create(req.body);
+    await klesh.populate("company");
     res.status(200).json({
       status: "success",
       data: {
@@ -19,7 +20,7 @@ export async function addKlesh(req, res) {
 
 export async function getKleshes(req, res) {
   try {
-    const kleshes = await KleshModel.find();
+    const kleshes = await KleshModel.find().populate("company");
     res.status(200).json({
       status: "success",
       data: {
@@ -36,7 +37,7 @@ export async function getKleshes(req, res) {
 
 export async function getKlesh(req, res) {
   try {
-    const klesh = await KleshModel.findById(req.params.id);
+    const klesh = await KleshModel.findById(req.params.id).populate("company");
     res.status(200).json({
       status: "success",
       data: {
@@ -68,7 +69,7 @@ export async function updateKlesh(req, res) {
     const klesh = await KleshModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
-    });
+    }).populate("company");
     res.status(200).json({
       status: "success",
       data: {

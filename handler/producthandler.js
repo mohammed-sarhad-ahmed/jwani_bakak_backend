@@ -3,6 +3,8 @@ import ProductModel from "../model/product";
 export async function addProduct(req, res) {
   try {
     const product = await ProductModel.create(req.body);
+    await product.populate("company");
+
     res.status(200).json({
       status: "success",
       data: {
@@ -19,7 +21,7 @@ export async function addProduct(req, res) {
 
 export async function getProducts(req, res) {
   try {
-    const products = await ProductModel.find();
+    const products = await ProductModel.find().populate("company");
     res.status(200).json({
       status: "success",
       data: {
@@ -36,7 +38,9 @@ export async function getProducts(req, res) {
 
 export async function getProduct(req, res) {
   try {
-    const product = await ProductModel.findById(req.params.id);
+    const product = await ProductModel.findById(req.params.id).populate(
+      "company"
+    );
     res.status(200).json({
       status: "success",
       data: {
@@ -65,11 +69,20 @@ export async function deleteProduct(req, res) {
 
 export async function updateProduct(req, res) {
   try {
-    await ProductModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
+    const product = await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).populate("company");
+    res.status(204).json({
+      message: "success",
+      data: {
+        product,
+      },
     });
-    res.status(204).end();
   } catch (error) {
     res.status(400).json({
       status: "fail",

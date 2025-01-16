@@ -3,6 +3,7 @@ import InvoiceModel from "../model/invoice";
 export async function addInvoice(req, res) {
   try {
     const invoice = await InvoiceModel.create(req.body);
+    await invoice.populate("company product");
     res.status(200).json({
       message: "success",
       data: {
@@ -18,7 +19,7 @@ export async function addInvoice(req, res) {
 
 export async function getInvoices(req, res) {
   try {
-    const invoices = await InvoiceModel.find();
+    const invoices = await InvoiceModel.find().populate("company product");
     res.status(200).json({
       message: "success",
       data: {
@@ -34,7 +35,9 @@ export async function getInvoices(req, res) {
 
 export async function getInvoice(req, res) {
   try {
-    const invoice = await InvoiceModel.findById(req.params.id);
+    const invoice = await InvoiceModel.findById(req.params.id).populate(
+      "company product"
+    );
     res.status(200).json({
       message: "success",
       data: {
@@ -68,7 +71,7 @@ export async function updateInvoice(req, res) {
         runValidators: true,
         new: true,
       }
-    );
+    ).populate("company product");
     res.status(200).json({
       message: "success",
       data: {

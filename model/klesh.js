@@ -6,7 +6,7 @@ const kleshSchema = new mongoose.Schema(
       type: String,
       required: [true, "you must provide the body of the klesh"],
     },
-    companyId: {
+    company: {
       type: mongoose.Types.ObjectId,
       ref: "Company",
       required: [true, "the brand for the product must be specified"],
