@@ -30,8 +30,12 @@ export async function addTransaction(req, res) {
 
 export async function getTransactions(req, res) {
   try {
+    const { pagination, companyId, productId } = req.query;
     const transactions = await transactionModel
-      .find()
+      .find({
+        ...(productId ? { product: productId } : {}),
+        ...(companyId ? { company: companyId } : {}),
+      })
       .populate("company product");
     res.status(200).json({
       message: "success",
