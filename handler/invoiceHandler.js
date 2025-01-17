@@ -22,6 +22,7 @@ export async function getInvoices(req, res) {
     const invoices = await InvoiceModel.find().populate("company product");
     res.status(200).json({
       message: "success",
+      results: invoices.length,
       data: {
         invoices,
       },

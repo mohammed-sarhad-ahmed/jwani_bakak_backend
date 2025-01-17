@@ -28,6 +28,7 @@ export async function getProducts(req, res) {
 
     res.status(200).json({
       status: "success",
+      results: products.length,
       data: {
         products,
       },

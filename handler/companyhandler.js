@@ -27,6 +27,7 @@ export async function getCompanies(req, res) {
     const companies = await CompanyModel.find();
     res.status(200).json({
       status: "success",
+      results: companies.length,
       data: {
         companies,
       },

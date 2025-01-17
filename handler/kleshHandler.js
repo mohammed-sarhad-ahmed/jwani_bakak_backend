@@ -20,9 +20,13 @@ export async function addKlesh(req, res) {
 
 export async function getKleshes(req, res) {
   try {
-    const kleshes = await KleshModel.find().populate("company");
+    const { paginate, companyId } = req.query;
+    const kleshes = await KleshModel.find({
+      company: companyId,
+    }).populate("company");
     res.status(200).json({
       status: "success",
+      results: kleshes.length,
       data: {
         kleshes,
       },

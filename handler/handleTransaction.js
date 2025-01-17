@@ -34,6 +34,7 @@ export async function getTransactions(req, res) {
       .populate("company product");
     res.status(200).json({
       message: "success",
+      results: transactions.length,
       data: {
         transactions,
       },
