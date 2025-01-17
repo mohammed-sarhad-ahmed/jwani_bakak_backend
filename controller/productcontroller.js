@@ -5,7 +5,7 @@ import {
   getProduct,
   getProducts,
   updateProduct,
-} from "../handler/producthandler";
+} from "../handler/producthandler.js";
 
 const router = express.Router();
 
