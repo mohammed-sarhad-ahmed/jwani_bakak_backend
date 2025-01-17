@@ -77,7 +77,7 @@ export async function updateProduct(req, res) {
         runValidators: true,
       }
     ).populate("company");
-    res.status(204).json({
+    res.status(200).json({
       message: "success",
       data: {
         product,
