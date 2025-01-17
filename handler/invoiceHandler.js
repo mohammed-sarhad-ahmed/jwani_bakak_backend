@@ -5,14 +5,15 @@ export async function addInvoice(req, res) {
     const invoice = await InvoiceModel.create(req.body);
     await invoice.populate("company product");
     res.status(200).json({
-      message: "success",
+      status: "success",
       data: {
         invoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      message: "fail",
+      status: "fail",
+      message: error.message,
     });
   }
 }
@@ -21,7 +22,7 @@ export async function getInvoices(req, res) {
   try {
     const invoices = await InvoiceModel.find().populate("company product");
     res.status(200).json({
-      message: "success",
+      status: "success",
       results: invoices.length,
       data: {
         invoices,
@@ -29,7 +30,8 @@ export async function getInvoices(req, res) {
     });
   } catch (error) {
     res.status(400).json({
-      message: "fail",
+      status: "fail",
+      message: error.message,
     });
   }
 }
@@ -40,14 +42,15 @@ export async function getInvoice(req, res) {
       "company product"
     );
     res.status(200).json({
-      message: "success",
+      status: "success",
       data: {
         invoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      message: "fail",
+      status: "fail",
+      message: error.message,
     });
   }
 }
@@ -58,7 +61,8 @@ export async function deleteInvoice(req, res) {
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
-      message: "fail",
+      status: "fail",
+      message: error.message,
     });
   }
 }
@@ -74,14 +78,15 @@ export async function updateInvoice(req, res) {
       }
     ).populate("company product");
     res.status(200).json({
-      message: "success",
+      status: "success",
       data: {
         invoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      message: "fail",
+      status: "fail",
+      message: error.message,
     });
   }
 }
