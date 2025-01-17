@@ -78,7 +78,12 @@ export async function updateCompany(req, res) {
         new: true,
       }
     );
-    res.status(204).json(company);
+    res.status(200).json({
+      status: "success",
+      data: {
+        company,
+      },
+    });
   } catch (error) {
     res.status(400).json({
       status: "fail",
