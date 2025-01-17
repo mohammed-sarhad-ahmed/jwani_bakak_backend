@@ -30,7 +30,7 @@ const transactionSchema = new mongoose.Schema(
 const transactionModel = mongoose.model("Transaction", transactionSchema);
 
 const sellTransactionSchema = new mongoose.Schema({
-  sellingPrice: {
+  soldPrice: {
     type: Number,
     required: [true, "you must provide the price that the product was sold at"],
   },
