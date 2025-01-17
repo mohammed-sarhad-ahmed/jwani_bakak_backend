@@ -18,7 +18,7 @@ app.use(express.json());
 app.use("/company", companyRouter);
 app.use("/product", productRouter);
 app.use("/klesh", kleshRouter);
-app.post("/invoice", invoiceRouter);
+app.use("/invoice", invoiceRouter);
 app.use("/transaction", transactionRouter);
 
 app.all("*", (req, res) => {
