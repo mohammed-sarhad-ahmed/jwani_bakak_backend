@@ -1,3 +1,4 @@
+import { pagination } from "../helper/pagination.js";
 import {
   transactionModel,
   sellTransactionModel,
@@ -30,13 +31,16 @@ export async function addTransaction(req, res) {
 
 export async function getTransactions(req, res) {
   try {
-    const { pagination, companyId, productId } = req.query;
+    const { page = 1, limit = 10, companyId, productId } = req.query;
+    const skip = pagination(page, limit);
     const transactions = await transactionModel
       .find({
         ...(productId ? { product: productId } : {}),
         ...(companyId ? { company: companyId } : {}),
       })
-      .populate("company product");
+      .populate("company product")
+      .skip(skip)
+      .limit(limit);
     res.status(200).json({
       message: "success",
       results: transactions.length,

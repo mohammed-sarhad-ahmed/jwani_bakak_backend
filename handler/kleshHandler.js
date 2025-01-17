@@ -1,3 +1,4 @@
+import { pagination } from "../helper/pagination.js";
 import KleshModel from "../model/klesh.js";
 
 export async function addKlesh(req, res) {
@@ -20,10 +21,14 @@ export async function addKlesh(req, res) {
 
 export async function getKleshes(req, res) {
   try {
-    const { paginate, companyId } = req.query;
+    const { page = 1, limit = 10, companyId } = req.query;
+    const skip = pagination(page, limit);
     const kleshes = await KleshModel.find({
       company: companyId,
-    }).populate("company");
+    })
+      .populate("company")
+      .skip(skip)
+      .limit(limit);
     res.status(200).json({
       status: "success",
       results: kleshes.length,
@@ -74,6 +79,7 @@ export async function updateKlesh(req, res) {
       new: true,
       runValidators: true,
     }).populate("company");
+
     res.status(200).json({
       status: "success",
       data: {

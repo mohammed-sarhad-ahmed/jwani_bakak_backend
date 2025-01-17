@@ -1,4 +1,5 @@
 import CompanyModel from "../model/company.js";
+import { pagination } from "../helper/pagination.js";
 
 export async function addCompany(req, res) {
   try {
@@ -24,8 +25,9 @@ export async function addCompany(req, res) {
 
 export async function getCompanies(req, res) {
   try {
-    const { pagination } = req.query;
-    const companies = await CompanyModel.find();
+    const { page = 1, limit = 10 } = req.query;
+    const skip = pagination(page, limit);
+    const companies = await CompanyModel.find().skip(skip).limit(limit);
     res.status(200).json({
       status: "success",
       results: companies.length,

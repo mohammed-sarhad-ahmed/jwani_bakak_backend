@@ -1,3 +1,4 @@
+import { pagination } from "../helper/pagination.js";
 import InvoiceModel from "../model/invoice.js";
 
 export async function addInvoice(req, res) {
@@ -20,11 +21,15 @@ export async function addInvoice(req, res) {
 
 export async function getInvoices(req, res) {
   try {
-    const { pagination, companyId, productId } = req.query;
+    const { page = 1, limit = 10, companyId, productId } = req.query;
+    const skip = pagination(page, limit);
     const invoices = await InvoiceModel.find({
       ...(productId ? { product: productId } : {}),
       ...(companyId ? { company: companyId } : {}),
-    }).populate("company product");
+    })
+      .populate("company product")
+      .skip(skip)
+      .limit(limit);
     res.status(200).json({
       status: "success",
       results: invoices.length,

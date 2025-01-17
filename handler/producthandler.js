@@ -1,4 +1,5 @@
 import ProductModel from "../model/product.js";
+import { pagination } from "../helper/pagination.js";
 
 export async function addProduct(req, res) {
   try {
@@ -21,10 +22,14 @@ export async function addProduct(req, res) {
 
 export async function getProducts(req, res) {
   try {
-    const { paginate, companyId } = req.query;
+    const { page = 1, limit = 10, companyId } = req.query;
+    const skip = pagination(page, limit);
     const products = await ProductModel.find({
       company: companyId,
-    }).populate("company");
+    })
+      .populate("company")
+      .skip(skip)
+      .limit(limit);
 
     res.status(200).json({
       status: "success",
