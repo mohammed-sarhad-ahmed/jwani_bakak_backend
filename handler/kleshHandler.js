@@ -23,6 +23,10 @@ export async function getKleshes(req, res) {
   try {
     const { page = 1, limit = 10, companyId } = req.query;
     const skip = pagination(page, limit);
+    if (req.query.page) {
+      const numberOfKlesh = await KleshModel.countDocuments();
+      if (skip >= numberOfKlesh) throw new Error("the page was not found");
+    }
     const kleshes = await KleshModel.find({
       company: companyId,
     })

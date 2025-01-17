@@ -24,6 +24,10 @@ export async function getProducts(req, res) {
   try {
     const { page = 1, limit = 10, companyId } = req.query;
     const skip = pagination(page, limit);
+    if (req.query.page) {
+      const numberProducts = await ProductModel.countDocuments();
+      if (skip >= numberProducts) throw new Error("the page was not found");
+    }
     const products = await ProductModel.find({
       company: companyId,
     })

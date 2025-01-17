@@ -33,6 +33,11 @@ export async function getTransactions(req, res) {
   try {
     const { page = 1, limit = 10, companyId, productId } = req.query;
     const skip = pagination(page, limit);
+    if (req.query.page) {
+      const numberOfTransactions = await transactionModel.countDocuments();
+      if (skip >= numberOfTransactions)
+        throw new Error("the page was not found");
+    }
     const transactions = await transactionModel
       .find({
         ...(productId ? { product: productId } : {}),

@@ -23,6 +23,10 @@ export async function getInvoices(req, res) {
   try {
     const { page = 1, limit = 10, companyId, productId } = req.query;
     const skip = pagination(page, limit);
+    if (req.query.page) {
+      const numberOfInvoices = await InvoiceModel.countDocuments();
+      if (skip >= numberOfInvoices) throw new Error("the page was not found");
+    }
     const invoices = await InvoiceModel.find({
       ...(productId ? { product: productId } : {}),
       ...(companyId ? { company: companyId } : {}),
