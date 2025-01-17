@@ -1,4 +1,4 @@
-import KleshModel from "../model/klesh";
+import KleshModel from "../model/klesh.js";
 
 export async function addKlesh(req, res) {
   try {

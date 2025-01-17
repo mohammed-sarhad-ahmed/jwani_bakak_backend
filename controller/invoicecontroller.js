@@ -5,7 +5,7 @@ import {
   getInvoice,
   getInvoices,
   updateInvoice,
-} from "../handler/invoiceHandler";
+} from "../handler/invoiceHandler.js";
 
 const router = express.Router();
 

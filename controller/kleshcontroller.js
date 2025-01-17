@@ -5,7 +5,7 @@ import {
   getKlesh,
   getKleshes,
   updateKlesh,
-} from "../handler/kleshHandler";
+} from "../handler/kleshHandler.js";
 const router = express.Router();
 
 router.route("/").post(addKlesh).get(getKleshes);

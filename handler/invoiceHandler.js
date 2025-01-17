@@ -1,4 +1,4 @@
-import InvoiceModel from "../model/invoice";
+import InvoiceModel from "../model/invoice.js";
 
 export async function addInvoice(req, res) {
   try {
