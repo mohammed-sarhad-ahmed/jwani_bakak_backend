@@ -20,7 +20,11 @@ export async function addInvoice(req, res) {
 
 export async function getInvoices(req, res) {
   try {
-    const invoices = await InvoiceModel.find().populate("company product");
+    const { pagination, companyId, productId } = req.query;
+    const invoices = await InvoiceModel.find({
+      ...(productId ? { product: productId } : {}),
+      ...(companyId ? { company: companyId } : {}),
+    }).populate("company product");
     res.status(200).json({
       status: "success",
       results: invoices.length,

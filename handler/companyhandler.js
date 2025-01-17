@@ -24,6 +24,7 @@ export async function addCompany(req, res) {
 
 export async function getCompanies(req, res) {
   try {
+    const { pagination } = req.query;
     const companies = await CompanyModel.find();
     res.status(200).json({
       status: "success",
