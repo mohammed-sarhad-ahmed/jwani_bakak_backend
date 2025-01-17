@@ -21,7 +21,11 @@ export async function addProduct(req, res) {
 
 export async function getProducts(req, res) {
   try {
-    const products = await ProductModel.find().populate("company");
+    const { paginate, companyId } = req.query;
+    const products = await ProductModel.find({
+      company: companyId,
+    }).populate("company");
+
     res.status(200).json({
       status: "success",
       data: {
