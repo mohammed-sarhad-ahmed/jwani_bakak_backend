@@ -7,9 +7,9 @@ import {
 export async function addTransaction(req, res) {
   try {
     let transaction;
-    if (req.body.transactionType === "Sell") {
+    if (req.body.transactionType.toLowerCase() === "sell") {
       transaction = await sellTransactionModel.create(req.body);
-    } else if (eq.body.transactionType === "Buy") {
+    } else if (eq.body.transactionType.toLowerCase() === "buy") {
       transaction = await buyTransactionModel.create(req.body);
     }
     await transaction.populate("company product");
