@@ -93,7 +93,7 @@ export async function deleteTransaction(req, res) {
 
 export async function updateTransaction(req, res) {
   try {
-    const { expenses, pricePerUnit, costPerUnit, ...updateObj } = req.body;
+    const { expenses, pricePerUnit, costPerUnit} = req.body;
     if (expenses || costPerUnit) {
       await buyTransactionModel.findByIdAndUpdate(
         req.params.id,
