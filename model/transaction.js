@@ -43,7 +43,7 @@ const buyTransactionSchema = new mongoose.Schema({
   },
   expenses: [
     {
-      nameOfExpense: {
+      expense: {
         type: String,
         required: [true, "the name of the expense should be provided"],
       },
