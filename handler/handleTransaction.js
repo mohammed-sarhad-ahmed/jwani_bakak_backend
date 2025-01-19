@@ -93,6 +93,25 @@ export async function deleteTransaction(req, res) {
 
 export async function updateTransaction(req, res) {
   try {
+    const { expenses, pricePerUnit, costPerUnit, ...updateObj } = req.body;
+    if (expenses || costPerUnit) {
+      await buyTransactionModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          expenses,
+          costPerUnit,
+        },
+        { runValidators: true }
+      );
+    } else if (pricePerUnit) {
+      await sellTransactionModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          pricePerUnit,
+        },
+        { runValidators: true }
+      );
+    }
     const transaction = await transactionModel
       .findByIdAndUpdate(req.params.id, req.body, {
         new: true,
