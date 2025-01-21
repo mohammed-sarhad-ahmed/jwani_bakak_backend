@@ -16,6 +16,18 @@ const invoiceSchema = new mongoose.Schema(
       type: String,
       required: [true, "provide the name of the person it is addressed to"],
     },
+    buy: {
+      type: {
+        type: String,
+        required: [true, "provide the name of the buyer"],
+      },
+    },
+    seller: {
+      type: {
+        type: String,
+        required: [true, "provide the name of the seller"],
+      },
+    },
   },
   {
     timestamps: true,

@@ -4,7 +4,14 @@ import InvoiceModel from "../model/invoice.js";
 export async function addInvoice(req, res) {
   try {
     const invoice = await InvoiceModel.create(req.body);
-    await invoice.populate("company product");
+    await invoice
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "product",
+        },
+      })
+      .populate("company");
     res.status(200).json({
       status: "success",
       data: {
