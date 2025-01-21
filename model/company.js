@@ -6,7 +6,7 @@ const companySchema = new mongoose.Schema(
       type: String,
       required: [true, "the companyName must be provided"],
     },
-    logoPath: {
+    logo: {
       type: String,
       required: [true, "you must provide a path to the company logo"],
     },

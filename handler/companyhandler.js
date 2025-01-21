@@ -3,11 +3,12 @@ import { pagination } from "../helper/pagination.js";
 
 export async function addCompany(req, res) {
   try {
-    const { address, companyName, logoPath } = req.body;
+    const { address, companyName } = req.body;
+    const { filename } = req.file;
     const company = await CompanyModel.create({
       companyName,
       address,
-      logoPath,
+      filename,
     });
     res.status(200).json({
       status: "succuss",
@@ -78,9 +79,10 @@ export async function deleteCompany(req, res) {
 
 export async function updateCompany(req, res) {
   try {
+    const { filename } = req.file;
     const company = await CompanyModel.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { ...req.body, logo: filename },
       {
         runValidators: true,
         new: true,
