@@ -25,7 +25,6 @@ export async function addInvoice(req, res) {
     });
   }
 }
-
 export async function getInvoices(req, res) {
   try {
     const { page = 1, limit = 10, companyId, productId } = req.query;
@@ -35,7 +34,6 @@ export async function getInvoices(req, res) {
       if (skip >= numberOfInvoices) throw new Error("the page was not found");
     }
     const invoices = await InvoiceModel.find({
-      ...(productId ? { product: productId } : {}),
       ...(companyId ? { company: companyId } : {}),
     })
       .populate({
