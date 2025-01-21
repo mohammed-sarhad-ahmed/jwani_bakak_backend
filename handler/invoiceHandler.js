@@ -31,7 +31,13 @@ export async function getInvoices(req, res) {
       ...(productId ? { product: productId } : {}),
       ...(companyId ? { company: companyId } : {}),
     })
-      .populate("company product")
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "product",
+        },
+      })
+      .populate("company")
       .skip(skip)
       .limit(limit);
     res.status(200).json({
@@ -51,9 +57,14 @@ export async function getInvoices(req, res) {
 
 export async function getInvoice(req, res) {
   try {
-    const invoice = await InvoiceModel.findById(req.params.id).populate(
-      "company product"
-    );
+    const invoice = await InvoiceModel.findById(req.params.id)
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "product",
+        },
+      })
+      .populate("company");
     res.status(200).json({
       status: "success",
       data: {
@@ -89,7 +100,14 @@ export async function updateInvoice(req, res) {
         runValidators: true,
         new: true,
       }
-    ).populate("company product");
+    )
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "product",
+        },
+      })
+      .populate("company");
     res.status(200).json({
       status: "success",
       data: {
