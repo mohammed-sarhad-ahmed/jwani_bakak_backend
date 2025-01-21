@@ -93,8 +93,8 @@ export async function deleteTransaction(req, res) {
 
 export async function updateTransaction(req, res) {
   try {
-    const { expenses, pricePerUnit, costPerUnit} = req.body;
-    if (expenses || costPerUnit) {
+    const { expenses, pricePerUnit, costPerUnit, transactionType } = req.body;
+    if (transactionType.toLowerCase() === "buy") {
       await buyTransactionModel.findByIdAndUpdate(
         req.params.id,
         {
@@ -103,7 +103,7 @@ export async function updateTransaction(req, res) {
         },
         { runValidators: true }
       );
-    } else if (pricePerUnit) {
+    } else if (transactionType.toLowerCase() === "sell") {
       await sellTransactionModel.findByIdAndUpdate(
         req.params.id,
         {

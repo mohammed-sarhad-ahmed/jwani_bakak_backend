@@ -20,6 +20,10 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       required: [true, "provide the currency for the transaction"],
     },
+    pricePerUnit: {
+      type: Number,
+      required: [true, "the pricePerUnit must be provided"],
+    },
   },
   {
     timestamps: true,
@@ -30,17 +34,14 @@ const transactionSchema = new mongoose.Schema(
 const transactionModel = mongoose.model("Transaction", transactionSchema);
 
 const sellTransactionSchema = new mongoose.Schema({
-  pricePerUnit: {
-    type: Number,
-    required: [true, "you must provide the price that the product was sold at"],
+  buyTransaction: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Sell",
+    required: [true, "the buy transaction must be specified"],
   },
 });
 
 const buyTransactionSchema = new mongoose.Schema({
-  costPerUnit: {
-    type: Number,
-    required: [true, "the cost must be provided"],
-  },
   expenses: [
     {
       expense: {
