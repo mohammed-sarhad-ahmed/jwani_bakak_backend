@@ -1,19 +1,19 @@
-import { pagination } from "../helper/pagination.js";
-import KleshModel from "../model/klesh.js";
+import { pagination } from '../helper/pagination.js';
+import KleshModel from '../model/klesh.js';
 
 export async function addKlesh(req, res) {
   try {
     const klesh = await KleshModel.create(req.body);
-    await klesh.populate("company");
+    await klesh.populate('company');
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         klesh,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -25,16 +25,16 @@ export async function getKleshes(req, res) {
     const skip = pagination(page, limit);
     if (req.query.page) {
       const numberOfKlesh = await KleshModel.countDocuments();
-      if (skip >= numberOfKlesh) throw new Error("the page was not found");
+      if (skip >= numberOfKlesh && numberOfKlesh !== 0) throw new Error('the page was not found');
     }
     const kleshes = await KleshModel.find({
       company: companyId,
     })
-      .populate("company")
+      .populate('company')
       .skip(skip)
       .limit(limit);
     res.status(200).json({
-      status: "success",
+      status: 'success',
       results: kleshes.length,
       data: {
         kleshes,
@@ -42,7 +42,7 @@ export async function getKleshes(req, res) {
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -50,16 +50,16 @@ export async function getKleshes(req, res) {
 
 export async function getKlesh(req, res) {
   try {
-    const klesh = await KleshModel.findById(req.params.id).populate("company");
+    const klesh = await KleshModel.findById(req.params.id).populate('company');
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         klesh,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -71,7 +71,7 @@ export async function deleteKlesh(req, res) {
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -82,17 +82,17 @@ export async function updateKlesh(req, res) {
     const klesh = await KleshModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
-    }).populate("company");
+    }).populate('company');
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         klesh,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }

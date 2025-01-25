@@ -1,20 +1,21 @@
-import ProductModel from "../model/product.js";
-import { pagination } from "../helper/pagination.js";
+import ProductModel from '../model/product.js';
+import { pagination } from '../helper/pagination.js';
+import { transactionModel } from '../model/transaction.js';
 
 export async function addProduct(req, res) {
   try {
     const product = await ProductModel.create(req.body);
-    await product.populate("company");
+    await product.populate('company');
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         product,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -26,17 +27,17 @@ export async function getProducts(req, res) {
     const skip = pagination(page, limit);
     if (req.query.page) {
       const numberProducts = await ProductModel.countDocuments();
-      if (skip >= numberProducts) throw new Error("the page was not found");
+      if (skip >= numberProducts && numberProducts !== 0) throw new Error('the page was not found');
     }
     const products = await ProductModel.find({
       company: companyId,
     })
-      .populate("company")
+      .populate('company')
       .skip(skip)
       .limit(limit);
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       results: products.length,
       data: {
         products,
@@ -44,7 +45,7 @@ export async function getProducts(req, res) {
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -52,18 +53,16 @@ export async function getProducts(req, res) {
 
 export async function getProduct(req, res) {
   try {
-    const product = await ProductModel.findById(req.params.id).populate(
-      "company"
-    );
+    const product = await ProductModel.findById(req.params.id).populate('company');
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         product,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -71,11 +70,13 @@ export async function getProduct(req, res) {
 
 export async function deleteProduct(req, res) {
   try {
-    await ProductModel.findByIdAndDelete(req.params.id);
+    const product = await ProductModel.findByIdAndDelete(req.params.id);
+    await transactionModel.deleteMany({ product: req.params.id });
+
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -83,23 +84,19 @@ export async function deleteProduct(req, res) {
 
 export async function updateProduct(req, res) {
   try {
-    const product = await ProductModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    ).populate("company");
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    }).populate('company');
     res.status(200).json({
-      message: "success",
+      message: 'success',
       data: {
         product,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }

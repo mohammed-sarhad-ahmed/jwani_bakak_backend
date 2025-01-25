@@ -1,52 +1,51 @@
-import { pagination } from "../helper/pagination.js";
-import InvoiceModel from "../model/invoice.js";
+import { pagination } from '../helper/pagination.js';
+import InvoiceModel from '../model/invoice.js';
 
 export async function addInvoice(req, res) {
   try {
     const invoice = await InvoiceModel.create(req.body);
-    await invoice
-      .populate({
-        path: "transaction",
-        populate: {
-          path: "product",
-        },
-      })
-      .populate("company");
+    await invoice.populate({
+      path: 'transactions',
+      populate: {
+        path: 'product',
+      },
+    });
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         invoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
 }
 export async function getInvoices(req, res) {
   try {
-    const { page = 1, limit = 10, companyId, productId } = req.query;
+    const { page = 1, limit = 10, companyId } = req.query;
     const skip = pagination(page, limit);
     if (req.query.page) {
       const numberOfInvoices = await InvoiceModel.countDocuments();
-      if (skip >= numberOfInvoices) throw new Error("the page was not found");
+
+      if (skip >= numberOfInvoices && numberOfInvoices !== 0)
+        throw new Error('the page was not found');
     }
     const invoices = await InvoiceModel.find({
       ...(companyId ? { company: companyId } : {}),
     })
       .populate({
-        path: "transaction",
+        path: 'transactions',
         populate: {
-          path: "product",
+          path: 'product',
         },
       })
-      .populate("company")
       .skip(skip)
       .limit(limit);
     res.status(200).json({
-      status: "success",
+      status: 'success',
       results: invoices.length,
       data: {
         invoices,
@@ -54,7 +53,7 @@ export async function getInvoices(req, res) {
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -62,23 +61,21 @@ export async function getInvoices(req, res) {
 
 export async function getInvoice(req, res) {
   try {
-    const invoice = await InvoiceModel.findById(req.params.id)
-      .populate({
-        path: "transaction",
-        populate: {
-          path: "product",
-        },
-      })
-      .populate("company");
+    const invoice = await InvoiceModel.findById(req.params.id).populate({
+      path: 'transactions',
+      populate: {
+        path: 'product',
+      },
+    });
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         invoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -90,7 +87,7 @@ export async function deleteInvoice(req, res) {
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -98,30 +95,24 @@ export async function deleteInvoice(req, res) {
 
 export async function updateInvoice(req, res) {
   try {
-    const invoice = await InvoiceModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        runValidators: true,
-        new: true,
-      }
-    )
-      .populate({
-        path: "transaction",
-        populate: {
-          path: "product",
-        },
-      })
-      .populate("company");
+    const invoice = await InvoiceModel.findByIdAndUpdate(req.params.id, req.body, {
+      runValidators: true,
+      new: true,
+    }).populate({
+      path: 'transactions',
+      populate: {
+        path: 'product',
+      },
+    });
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         invoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }

@@ -1,37 +1,50 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const invoiceSchema = new mongoose.Schema(
   {
     company: {
       type: mongoose.Types.ObjectId,
-      ref: "Company",
-      required: [true, "you must provide an companyId"],
+      ref: 'Company',
+      required: [true, 'you must provide an companyId'],
     },
-    transaction: {
-      type: mongoose.Types.ObjectId,
-      ref: "Transaction",
-      required: [true, "you must provide an transactionId"],
+    transactions: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: 'Transaction',
+          required: [true, 'you must provide a transactionId'],
+        },
+      ],
+      required: [true, 'you must provide transactions'],
     },
     addressedTo: {
       type: String,
-      required: [true, "provide the name of the person it is addressed to"],
+      required: [true, 'provide the name of the person it is addressed to'],
     },
-    buy: {
-      type: {
-        type: String,
-        required: [true, "provide the name of the buyer"],
-      },
+    buyer: {
+      type: String,
+      required: [true, 'provide the name of the buyer'],
     },
     seller: {
-      type: {
-        type: String,
-        required: [true, "provide the name of the seller"],
-      },
+      type: String,
+      required: [true, 'provide the name of the seller'],
     },
   },
   {
     timestamps: true,
   }
 );
+// invoiceSchema.post(/^find/, async function (doc, next) {
+//   const invoices = await InvoiceModel.find({ transactions: doc._id });
+//   console.log(invoices.length);
+//   // for (let i = 0; i < invoices.length; i++) {
+//   //   if (invoices[i].transactions.length === 0) {
+//   //     const invoice = await InvoiceModel.findByIdAndDelete(invoices[i]._id);
+//   //     console.log(invoice);
+//   //   }
+//   // }
+//   next();
+// });
+const InvoiceModel = mongoose.model('Invoice', invoiceSchema);
 
-export default mongoose.model("Invoice", invoiceSchema);
+export default InvoiceModel;

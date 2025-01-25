@@ -1,29 +1,41 @@
-import { pagination } from "../helper/pagination.js";
+import { pagination } from '../helper/pagination.js';
 import {
   transactionModel,
   sellTransactionModel,
   buyTransactionModel,
-} from "../model/transaction.js";
+} from '../model/transaction.js';
+import invoiceModel from '../model/invoice.js';
 
 export async function addTransaction(req, res) {
   try {
     const { transactionType, ...body } = req.body;
     let transaction;
-    if (transactionType.toLowerCase() === "sell") {
+    if (transactionType.toLowerCase() === 'sell') {
+      const buyTransaction = await buyTransactionModel.findById(body.buyTransaction);
+      if (
+        Number(buyTransaction.quantity) <
+        Number(req.body.quantity) + Number(buyTransaction.soldQuantity)
+      ) {
+        throw new Error('the quantity you want to sell is more than the quantity you bought');
+      } else {
+        buyTransaction.soldQuantity += Number(req.body.quantity);
+        await buyTransaction.save();
+      }
       transaction = await sellTransactionModel.create(body);
-    } else if (transactionType.toLowerCase() === "buy") {
+    } else if (transactionType.toLowerCase() === 'buy') {
       transaction = await buyTransactionModel.create(body);
     }
-    await transaction.populate("company product");
+
+    await transaction.populate('company product');
     res.status(200).json({
-      message: "success",
+      message: 'success',
       data: {
         transaction,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -35,19 +47,19 @@ export async function getTransactions(req, res) {
     const skip = pagination(page, limit);
     if (req.query.page) {
       const numberOfTransactions = await transactionModel.countDocuments();
-      if (skip >= numberOfTransactions)
-        throw new Error("the page was not found");
+      if (skip >= numberOfTransactions && numberOfTransactions !== 0)
+        throw new Error('the page was not found');
     }
     const transactions = await transactionModel
       .find({
         ...(productId ? { product: productId } : {}),
         ...(companyId ? { company: companyId } : {}),
       })
-      .populate("company product")
+      .populate('company product')
       .skip(skip)
       .limit(limit);
     res.status(200).json({
-      message: "success",
+      message: 'success',
       results: transactions.length,
       data: {
         transactions,
@@ -55,25 +67,23 @@ export async function getTransactions(req, res) {
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
 }
 export async function getTransaction(req, res) {
   try {
-    const transaction = await transactionModel
-      .findById(req.params.id)
-      .populate("company product");
+    const transaction = await transactionModel.findById(req.params.id).populate('company product');
     res.status(200).json({
-      message: "success",
+      message: 'success',
       data: {
         transaction,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -81,11 +91,28 @@ export async function getTransaction(req, res) {
 
 export async function deleteTransaction(req, res) {
   try {
-    await transactionModel.findByIdAndDelete(req.params.id);
+    const transaction = await transactionModel.findById(req.params.id);
+    if (transaction.transactionType.toLowerCase() === 'buy') {
+      await sellTransactionModel.deleteMany({
+        buyTransaction: transaction._id,
+      });
+    } else {
+      const buyTransaction = await buyTransactionModel.findById(transaction.buyTransaction);
+      buyTransaction.soldQuantity -= transaction.quantity;
+      await buyTransaction.save();
+    }
+    const deletedTransaction = await transactionModel.findByIdAndDelete(req.params.id);
+    const invoices = await invoiceModel.find({ transactions: deletedTransaction._id });
+    for (let i = 0; i < invoices.length; i++) {
+      if (invoices[i].transactions.length === 1) {
+        await invoiceModel.findByIdAndDelete(invoices[i]._id);
+      }
+    }
+
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
@@ -93,40 +120,43 @@ export async function deleteTransaction(req, res) {
 
 export async function updateTransaction(req, res) {
   try {
-    const { expenses, pricePerUnit, costPerUnit, transactionType } = req.body;
-    if (transactionType.toLowerCase() === "buy") {
+    const { expenses, transactionType } = req.body;
+    if (transactionType.toLowerCase() === 'buy') {
       await buyTransactionModel.findByIdAndUpdate(
         req.params.id,
         {
           expenses,
-          costPerUnit,
         },
         { runValidators: true }
       );
-    } else if (transactionType.toLowerCase() === "sell") {
-      await sellTransactionModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          pricePerUnit,
-        },
-        { runValidators: true }
-      );
+    }
+    if (transactionType.toLowerCase() === 'sell') {
+      const buyTransaction = await buyTransactionModel.findById(req.body.buyTransaction);
+      if (
+        Number(buyTransaction.quatity) <
+        Number(req.body.quatity) + Number(buyTransaction.soldQuantity)
+      ) {
+        throw new Error('the quantity you want to sell is more than the quantity you bought');
+      } else {
+        buyTransaction.soldQuantity += Number(req.body.quatity);
+        await buyTransaction.save();
+      }
     }
     const transaction = await transactionModel
       .findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
       })
-      .populate("company product");
+      .populate('company product');
     res.status(200).json({
-      message: "success",
+      message: 'success',
       data: {
         transaction,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: error.message,
     });
   }
