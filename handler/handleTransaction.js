@@ -16,13 +16,13 @@ export async function addTransaction(req, res) {
       );
       if (
         Number(buyTransaction.quantity) <
-        Number(req.body.quantity) + Number(buyTransaction.soldQuantity)
+        Number(body.quantity) + Number(buyTransaction.soldQuantity)
       ) {
         throw new Error(
           "the quantity you want to sell is more than the quantity you bought"
         );
       } else {
-        buyTransaction.soldQuantity += Number(req.body.quantity);
+        buyTransaction.soldQuantity += Number(body.quantity);
         await buyTransaction.save();
       }
       transaction = await sellTransactionModel.create(body);
