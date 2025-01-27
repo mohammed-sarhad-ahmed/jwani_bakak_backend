@@ -112,14 +112,13 @@ export async function deleteTransaction(req, res) {
     const deletedTransaction = await transactionModel.findByIdAndDelete(
       req.params.id
     );
-    const invoices = await invoiceModel.find({
-      transactions: deletedTransaction._id,
+    await invoiceModel.updateMany(
+      { transactions: deletedTransaction._id },
+      { $pull: { transactions: deletedTransaction._id } }
+    );
+    await invoiceModel.deleteMany({
+      transactions: { $size: 0 },
     });
-    for (let i = 0; i < invoices.length; i++) {
-      if (invoices[i].transactions.length === 1) {
-        await invoiceModel.findByIdAndDelete(invoices[i]._id);
-      }
-    }
 
     res.status(204).end();
   } catch (error) {
