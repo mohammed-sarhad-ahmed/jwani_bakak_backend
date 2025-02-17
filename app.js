@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(async (req, res, next) => {
+app.all("*", async (req, res, next) => {
   try {
     if (req.cookies.Auth === process.env.COOKIE) {
       return next();
