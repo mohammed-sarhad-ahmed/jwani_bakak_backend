@@ -11,10 +11,19 @@ const kleshSchema = new mongoose.Schema(
       ref: "Company",
       required: [true, "the brand for the product must be specified"],
     },
+    NO: { type: Number },
   },
   {
     timestamps: true,
   }
 );
-
+kleshSchema.pre("save", async function (next) {
+  if (this.isNew && !this.NO) {
+    const lastDoc = await this.constructor
+      .findOne({ company: this.company })
+      .sort("-NO");
+    this.NO = lastDoc ? lastDoc.NO + 1 : 1;
+  }
+  next();
+});
 export default mongoose.model("Klesh", kleshSchema);

@@ -1,50 +1,50 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const invoiceSchema = new mongoose.Schema(
   {
     company: {
       type: mongoose.Types.ObjectId,
-      ref: 'Company',
-      required: [true, 'you must provide an companyId'],
+      ref: "Company",
+      required: [true, "you must provide an companyId"],
     },
     transactions: {
       type: [
         {
           type: mongoose.Types.ObjectId,
-          ref: 'Transaction',
-          required: [true, 'you must provide a transactionId'],
+          ref: "Transaction",
+          required: [true, "you must provide a transactionId"],
         },
       ],
-      required: [true, 'you must provide transactions'],
+      required: [true, "you must provide transactions"],
     },
     addressedTo: {
       type: String,
-      required: [true, 'provide the name of the person it is addressed to'],
+      required: [true, "provide the name of the person it is addressed to"],
     },
     buyer: {
       type: String,
-      required: [true, 'provide the name of the buyer'],
+      required: [true, "provide the name of the buyer"],
     },
     seller: {
       type: String,
-      required: [true, 'provide the name of the seller'],
+      required: [true, "provide the name of the seller"],
     },
+    NO: { type: Number },
   },
   {
     timestamps: true,
   }
 );
-// invoiceSchema.post(/^find/, async function (doc, next) {
-//   const invoices = await InvoiceModel.find({ transactions: doc._id });
-//   console.log(invoices.length);
-//   // for (let i = 0; i < invoices.length; i++) {
-//   //   if (invoices[i].transactions.length === 0) {
-//   //     const invoice = await InvoiceModel.findByIdAndDelete(invoices[i]._id);
-//   //     console.log(invoice);
-//   //   }
-//   // }
-//   next();
-// });
-const InvoiceModel = mongoose.model('Invoice', invoiceSchema);
+invoiceSchema.pre("save", async function (next) {
+  if (this.isNew && !this.NO) {
+    const lastDoc = await this.constructor
+      .findOne({ company: this.company })
+      .sort("-NO");
+    this.NO = lastDoc ? lastDoc.NO + 1 : 1;
+  }
+  next();
+});
+
+const InvoiceModel = mongoose.model("Invoice", invoiceSchema);
 
 export default InvoiceModel;
