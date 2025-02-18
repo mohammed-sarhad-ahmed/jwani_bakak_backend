@@ -23,18 +23,18 @@ app.all("*", async (req, res, next) => {
     if (req.cookies.Auth === process.env.COOKIE) {
       return next();
     }
+    if (!process.env.PASSCODE) throw new Error("problem with env variable");
+    if (!req.body.passcode) throw new Error();
     const hashPass = await bcrypt.hash(process.env.PASSCODE, 10);
     const isAuth = await bcrypt.compare(req.body.passcode, hashPass);
     if (isAuth) {
       res.cookie("Auth", process.env.COOKIE);
       return next();
     }
+    throw Error();
+  } catch (error) {
     res.status(403).json({
       message: "wrong credential",
-    });
-  } catch (error) {
-    res.status(400).send({
-      message: error.message,
     });
   }
 });
