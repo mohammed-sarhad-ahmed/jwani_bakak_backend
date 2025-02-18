@@ -21,7 +21,13 @@ app.use(cookieParser());
 app.all("*", async (req, res, next) => {
   try {
     if (req.cookies.Auth === process.env.COOKIE) {
-      return next();
+      if (req.path !== "/") {
+        return next();
+      } else {
+        return res.status(200).json({
+          message: "success login",
+        });
+      }
     }
     if (!process.env.PASSCODE) throw new Error("problem with env variable");
     if (!req.body.passcode) throw new Error();
@@ -29,7 +35,13 @@ app.all("*", async (req, res, next) => {
     const isAuth = await bcrypt.compare(req.body.passcode, hashPass);
     if (isAuth) {
       res.cookie("Auth", process.env.COOKIE);
-      return next();
+      if (req.path !== "/") {
+        return next();
+      } else {
+        return res.status(200).json({
+          message: "success login",
+        });
+      }
     }
     throw Error();
   } catch (error) {
