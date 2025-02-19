@@ -1,7 +1,7 @@
-import UploadedInvoicesModel from '../model/uploadedInvoices.js';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import UploadedInvoicesModel from "../model/uploadedInvoices.js";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,14 +15,14 @@ export async function uploadInvoice(req, res) {
       name,
     });
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         uploadedInvoice,
       },
     });
   } catch (error) {
     res.status(400).json({
-      status: 'fail',
+      status: "fail",
       message: error.message,
     });
   }
@@ -34,7 +34,7 @@ export async function getUploadedInvoices(req, res) {
       company: req.query.companyId,
     });
     res.status(200).json({
-      status: 'success',
+      status: "success",
       result: uploadedInvoices.length,
       data: {
         uploadedInvoices,
@@ -42,7 +42,7 @@ export async function getUploadedInvoices(req, res) {
     });
   } catch (error) {
     res.status(400).json({
-      status: 'fail',
+      status: "fail",
       message: error.message,
     });
   }
@@ -51,18 +51,10 @@ export async function getUploadedInvoices(req, res) {
 export async function getUploadedInvoice(req, res) {
   try {
     const { id } = req.params;
-    const uploadedInvoice = await UploadedInvoicesModel.findById({
-      id,
-    });
-    res.status(200).json({
-      status: 'success',
-      data: {
-        uploadedInvoice,
-      },
-    });
+    res.download(`../public/uploadedInvoicesImg/${id}`);
   } catch (error) {
     res.status(400).json({
-      status: 'fail',
+      status: "fail",
       message: error.message,
     });
   }
@@ -70,7 +62,9 @@ export async function getUploadedInvoice(req, res) {
 
 export async function deleteUploadedInvoice(req, res) {
   try {
-    const uploadedInvoice = await UploadedInvoicesModel.findByIdAndDelete(req.params.id);
+    const uploadedInvoice = await UploadedInvoicesModel.findByIdAndDelete(
+      req.params.id
+    );
     const filePath = path.join(
       __dirname,
       `../public/uploadedInvoicesImg/`,
@@ -81,7 +75,7 @@ export async function deleteUploadedInvoice(req, res) {
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
-      status: 'fail',
+      status: "fail",
       message: error.message,
     });
   }
