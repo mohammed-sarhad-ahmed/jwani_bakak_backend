@@ -51,7 +51,12 @@ export async function getUploadedInvoices(req, res) {
 export async function getUploadedInvoice(req, res) {
   try {
     const { id } = req.params;
-    res.sendFile(`../public/uploadedInvoicesImg/${id}`);
+    const filePath = path.join(__dirname, "/public/uploadedInvoicesImg/", id);
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=downloaded-file.pdf",
+    );
+    res.sendFile(filePath);
   } catch (error) {
     res.status(400).json({
       status: "fail",
