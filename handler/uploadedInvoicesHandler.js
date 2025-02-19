@@ -5,6 +5,8 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const rootDir = path.join(__dirname, "../"); // Moves up one level
+
 export async function uploadInvoice(req, res) {
   try {
     const { filename } = req.file;
@@ -51,7 +53,8 @@ export async function getUploadedInvoices(req, res) {
 export async function getUploadedInvoice(req, res) {
   try {
     const { id } = req.params;
-    const filePath = path.join(__dirname, "/public/uploadedInvoicesImg/", id);
+    const filePath = path.join(rootDir, "public/uploadedInvoicesImg/", id);
+
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=downloaded-file.pdf",
