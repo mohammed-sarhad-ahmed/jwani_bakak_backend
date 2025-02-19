@@ -13,13 +13,12 @@ import uploadedInvoicesRouter from "./controller/uploadedInvoicesControler.js";
 
 const app = express();
 
+app.use(cors({
+  origin: ["https://jwani-app.fairpiranha.box.ca", "http://localhost:3000"], // Add localhost
+  credentials: true,
+}));
+
 dotenv.config();
-app.use(
-  cors({
-    origin: "https://jwani-balak-cms-frontend.vercel.app",
-    credentials: true,
-  })
-);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -39,7 +38,14 @@ app.all("*", async (req, res, next) => {
     const hashPass = await bcrypt.hash(process.env.PASSCODE, 10);
     const isAuth = await bcrypt.compare(req.body.passcode, hashPass);
     if (isAuth) {
-      res.cookie("Auth", process.env.COOKIE);
+      const isLocal = req.hostname === "localhost";
+      res.cookie("Auth", process.env.COOKIE, {
+        secure: !isLocal,
+        sameSite: isLocal ? "lax" : "none",
+        domain: isLocal ? undefined : ".fairpiranha.box.ca",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
       if (req.path !== "/") {
         return next();
       } else {
@@ -73,9 +79,9 @@ const databasePort = process.env.DATABASEPORT;
 const databaseAddress = process.env.DATABASEADDRESS;
 console.log(databaseAddress, databasePort);
 await mongoose.connect(
-  `mongodb://${process.env.DATABASEADDRESS}:${process.env.DATABASEPORT}/jwani_balak`
+  "mongodb+srv://paiwast:123@cluster0.obnne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
 );
 
-app.listen(8080, () => {
+app.listen(8085, "0.0.0.0", () => {
   console.log("server has started at port 8080");
 });
