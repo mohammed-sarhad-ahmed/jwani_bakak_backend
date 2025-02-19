@@ -51,7 +51,7 @@ export async function getUploadedInvoices(req, res) {
 export async function getUploadedInvoice(req, res) {
   try {
     const { id } = req.params;
-    res.download(`../public/uploadedInvoicesImg/${id}`);
+    res.sendFile(`../public/uploadedInvoicesImg/${id}`);
   } catch (error) {
     res.status(400).json({
       status: "fail",
@@ -63,12 +63,12 @@ export async function getUploadedInvoice(req, res) {
 export async function deleteUploadedInvoice(req, res) {
   try {
     const uploadedInvoice = await UploadedInvoicesModel.findByIdAndDelete(
-      req.params.id
+      req.params.id,
     );
     const filePath = path.join(
       __dirname,
       `../public/uploadedInvoicesImg/`,
-      uploadedInvoice.filePath
+      uploadedInvoice.filePath,
     );
     console.log(filePath);
     await fs.unlink(filePath);

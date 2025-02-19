@@ -1,9 +1,9 @@
 import express from "express";
 import {
   addTransaction,
-  getTransactions,
-  getTransaction,
   deleteTransaction,
+  getTransaction,
+  getTransactions,
   updateTransaction,
 } from "../handler/handleTransaction.js";
 
