@@ -6,17 +6,18 @@ import bcrypt from "bcryptjs";
 import cookieParser from "cookie-parser";
 import companyRouter from "./controller/companycontroller.js";
 import productRouter from "./controller/productcontroller.js";
-import kleshRouter from "./controller/kleshcontroller.js";
 import invoiceRouter from "./controller/invoicecontroller.js";
 import transactionRouter from "./controller/transactioncontroller.js";
 import uploadedInvoicesRouter from "./controller/uploadedInvoicesControler.js";
 
 const app = express();
 
-app.use(cors({
-  origin: ["https://jwani-app.fairpiranha.box.ca", "http://localhost:3000"], // Add localhost
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["https://jwani-app.fairpiranha.box.ca", "http://localhost:3000"], // Add localhost
+    credentials: true,
+  })
+);
 
 dotenv.config();
 app.use(express.json());
@@ -63,7 +64,6 @@ app.all("*", async (req, res, next) => {
 });
 app.use("/company", companyRouter);
 app.use("/product", productRouter);
-app.use("/klesh", kleshRouter);
 app.use("/invoice", invoiceRouter);
 app.use("/transaction", transactionRouter);
 app.use("/uploadedInvoices", uploadedInvoicesRouter);
@@ -79,7 +79,7 @@ const databasePort = process.env.DATABASEPORT;
 const databaseAddress = process.env.DATABASEADDRESS;
 console.log(databaseAddress, databasePort);
 await mongoose.connect(
-  "mongodb+srv://paiwast:123@cluster0.obnne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+  "mongodb+srv://paiwast:123@cluster0.obnne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 );
 
 app.listen(8085, "0.0.0.0", () => {
