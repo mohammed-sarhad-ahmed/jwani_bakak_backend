@@ -14,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://jwani-app.fairpiranha.box.ca", "http://localhost:3000"], // Add localhost
+    origin: ["https://jwani-app.fairpiranha.box.ca", "http://localhost:3000"],
     credentials: true,
   })
 );
@@ -83,5 +83,5 @@ await mongoose.connect(
 );
 
 app.listen(8085, "0.0.0.0", () => {
-  console.log("server has started at port 8080");
+  console.log("server has started at port 8085");
 });
