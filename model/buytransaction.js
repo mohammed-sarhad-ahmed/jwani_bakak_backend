@@ -37,7 +37,6 @@ const buyTransaction = new mongoose.Schema(
 );
 buyTransaction.post("findOneAndDelete", async function (doc) {
   try {
-    console.log(doc);
     const composedProductsToDelete = doc.products;
     if (composedProductsToDelete && composedProductsToDelete.length > 0) {
       await mongoose.model("ComposedProduct").deleteMany({

@@ -32,7 +32,9 @@ export async function getBuyTransactions(req, res) {
   try {
     const buyTransactions = await BuyTransactionModel.find({
       company: req.query.companyId,
-    });
+    })
+      .populate("products")
+      .populate("company");
 
     res.status(200).json({
       status: "success",
