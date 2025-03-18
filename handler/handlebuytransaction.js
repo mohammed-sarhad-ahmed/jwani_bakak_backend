@@ -12,8 +12,8 @@ export async function addBuyTransaction(req, res) {
       products: productIds,
       ...others,
     });
-    // await buyTransaction.populate("products").populate("company");
-
+    await buyTransaction.populate("company");
+    await buyTransaction.populate("products");
     res.status(200).json({
       status: "success",
       data: {

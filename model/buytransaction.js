@@ -19,7 +19,7 @@ const buyTransaction = new mongoose.Schema(
       type: [
         {
           type: mongoose.Types.ObjectId,
-          ref: "ComposedProductModel",
+          ref: "ComposedProduct",
           required: [true, "you must provide an composed productId"],
         },
       ],
