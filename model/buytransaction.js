@@ -20,10 +20,7 @@ const ComposedProductSchema = new mongoose.Schema(
   }
 );
 
-const ComposedProductModel = new mongoose.model(
-  "ComposedProduct",
-  ComposedProductSchema
-);
+new mongoose.model("ComposedProduct", ComposedProductSchema);
 
 const buyTransaction = new mongoose.Schema(
   {
