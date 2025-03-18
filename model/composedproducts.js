@@ -4,7 +4,7 @@ const ComposedProductSchema = new mongoose.Schema(
     product: {
       type: mongoose.Types.ObjectId,
       ref: "Product",
-      required: [true, "you must provide an productId"],
+      required: [true, "you must provide an product id"],
     },
     quantity: {
       type: Number,
@@ -20,4 +20,4 @@ const ComposedProductSchema = new mongoose.Schema(
   }
 );
 
-export default new mongoose.model("ComposedProduct", ComposedProductSchema);
+export default mongoose.model("ComposedProduct", ComposedProductSchema);

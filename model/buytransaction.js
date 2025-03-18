@@ -23,12 +23,29 @@ const buyTransaction = new mongoose.Schema(
           required: [true, "you must provide an composed productId"],
         },
       ],
-      required: [true, "you must provide a products for the transaction"],
+      validate: {
+        validator: function (products) {
+          return products.length > 0;
+        },
+        message: "Products array cannot be empty",
+      },
     },
   },
   {
     timestamps: true,
   }
 );
-
+buyTransaction.post("findOneAndDelete", async function (doc) {
+  try {
+    console.log(doc);
+    const composedProductsToDelete = doc.products;
+    if (composedProductsToDelete && composedProductsToDelete.length > 0) {
+      await mongoose.model("ComposedProduct").deleteMany({
+        _id: { $in: composedProductsToDelete },
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting composed products:", error);
+  }
+});
 export default mongoose.model("BuyTransaction", buyTransaction);

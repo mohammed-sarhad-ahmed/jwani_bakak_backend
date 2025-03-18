@@ -1,20 +1,18 @@
 import BuyTransactionModel from "../model/buytransaction.js";
-import ComposedProductsModel from "../model/composedproducts.js";
-
+import ComposedProductsModel from "../model/composedProducts.js";
 export async function addBuyTransaction(req, res) {
   try {
     const { composedProducts, ...others } = req.body;
     const products = await ComposedProductsModel.create(composedProducts);
-    let ProductIds = [];
+    let productIds = [];
     for (let i = 0; i < products.length; i++) {
-      ProductIds[i] = products._id;
+      productIds[i] = products[i]._id;
     }
     const buyTransaction = await BuyTransactionModel.create({
-      ProductIds,
+      products: productIds,
       ...others,
-    })
-      .populate("products")
-      .populate("company");
+    });
+    // await buyTransaction.populate("products").populate("company");
 
     res.status(200).json({
       status: "success",
@@ -34,7 +32,7 @@ export async function getBuyTransactions(req, res) {
   try {
     const buyTransactions = await BuyTransactionModel.find({
       company: req.query.companyId,
-    }).populate("Products");
+    });
 
     res.status(200).json({
       status: "success",
@@ -51,7 +49,7 @@ export async function getBuyTransactions(req, res) {
 }
 export async function getBuyTransaction(req, res) {
   try {
-    const buyTransaction = await BuyTransactionModel.findById(req.prams.id)
+    const buyTransaction = await BuyTransactionModel.findById(req.params.id)
       .populate("products")
       .populate("company");
 
@@ -71,14 +69,10 @@ export async function getBuyTransaction(req, res) {
 
 export async function deleteBuyTransaction(req, res) {
   try {
-    const buyTransaction = await BuyTransactionModel.findByIdAndDelete(
-      req.prams.id
-    );
-    await ComposedProductsModel.deleteMany({
-      _id: {
-        $in: buyTransaction.products,
-      },
+    await BuyTransactionModel.findOneAndDelete({
+      _id: req.params.id,
     });
+
     res.status(204).end();
   } catch (error) {
     res.status(400).json({

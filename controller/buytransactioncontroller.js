@@ -4,10 +4,11 @@ import {
   updateBuyTransaction,
   deleteBuyTransaction,
   getBuyTransaction,
+  getBuyTransactions,
 } from "../handler/handlebuytransaction.js";
 
 const router = express.Router();
-router.route("/").post(addBuyTransaction).get(getBuyTransaction);
+router.route("/").post(addBuyTransaction).get(getBuyTransactions);
 router
   .route("/:id")
   .get(getBuyTransaction)
