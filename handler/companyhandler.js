@@ -26,6 +26,7 @@ export async function addCompany(req, res) {
       },
     });
   } catch (error) {
+    await fs.unlink(req.file.fileName);
     res.status(400).json({
       status: "fail",
       message: error.message,
@@ -93,7 +94,6 @@ export async function deleteCompany(req, res) {
       await fs.unlink(filePath);
     }
     await ProductModel.deleteMany({ company: req.params.id });
-    await KleshModel.deleteMany({ company: req.params.id });
     await InvoiceModel.deleteMany({ company: req.params.id });
     await UploadedInvoiceModel.deleteMany({
       company: req.params.id,
