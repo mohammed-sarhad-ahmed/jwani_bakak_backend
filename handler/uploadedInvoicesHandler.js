@@ -57,7 +57,7 @@ export async function getUploadedInvoice(req, res) {
 
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=downloaded-file.pdf",
+      "attachment; filename=downloaded-file.pdf"
     );
     res.sendFile(filePath);
   } catch (error) {
@@ -71,14 +71,13 @@ export async function getUploadedInvoice(req, res) {
 export async function deleteUploadedInvoice(req, res) {
   try {
     const uploadedInvoice = await UploadedInvoicesModel.findByIdAndDelete(
-      req.params.id,
+      req.params.id
     );
     const filePath = path.join(
       __dirname,
       `../public/uploadedInvoicesImg/`,
-      uploadedInvoice.filePath,
+      uploadedInvoice.filePath
     );
-    console.log(filePath);
     await fs.unlink(filePath);
     res.status(204).end();
   } catch (error) {

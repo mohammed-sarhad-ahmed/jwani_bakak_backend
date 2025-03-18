@@ -4,7 +4,6 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import ProductModel from "../model/product.js";
-import KleshModel from "../model/klesh.js";
 import InvoiceModel from "../model/invoice.js";
 import UploadedInvoiceModel from "../model/uploadedInvoices.js";
 

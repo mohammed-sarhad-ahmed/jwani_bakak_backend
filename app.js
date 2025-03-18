@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import companyRouter from "./controller/companycontroller.js";
 import productRouter from "./controller/productcontroller.js";
 import invoiceRouter from "./controller/invoicecontroller.js";
-import transactionRouter from "./controller/transactioncontroller.js";
 import uploadedInvoicesRouter from "./controller/uploadedInvoicesControler.js";
 
 const app = express();
@@ -65,7 +64,6 @@ app.all("*", async (req, res, next) => {
 app.use("/company", companyRouter);
 app.use("/product", productRouter);
 app.use("/invoice", invoiceRouter);
-app.use("/transaction", transactionRouter);
 app.use("/uploadedInvoices", uploadedInvoicesRouter);
 
 app.use(express.static("public"));
@@ -75,9 +73,7 @@ app.all("*", (req, res) => {
     message: `failed to find the route ${req.originalUrl}`,
   });
 });
-const databasePort = process.env.DATABASEPORT;
-const databaseAddress = process.env.DATABASEADDRESS;
-console.log(databaseAddress, databasePort);
+
 await mongoose.connect(
   "mongodb+srv://paiwast:123@cluster0.obnne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 );
