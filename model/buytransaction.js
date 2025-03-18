@@ -1,26 +1,4 @@
 import mongoose from "mongoose";
-const ComposedProductSchema = new mongoose.Schema(
-  {
-    product: {
-      type: mongoose.Types.ObjectId,
-      ref: "Product",
-      required: [true, "you must provide an productId"],
-    },
-    quantity: {
-      type: Number,
-      required: [true, "the quantity must be provided"],
-    },
-    pricePerUnit: {
-      type: Number,
-      required: [true, "the pricePerUnit must be provided"],
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-new mongoose.model("ComposedProduct", ComposedProductSchema);
 
 const buyTransaction = new mongoose.Schema(
   {
@@ -53,4 +31,4 @@ const buyTransaction = new mongoose.Schema(
   }
 );
 
-const BuyTransactionModel = mongoose.model("BuyTransaction", buyTransaction);
+export default mongoose.model("BuyTransaction", buyTransaction);
