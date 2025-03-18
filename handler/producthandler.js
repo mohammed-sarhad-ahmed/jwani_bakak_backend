@@ -1,6 +1,5 @@
 import ProductModel from "../model/product.js";
 import { pagination } from "../helper/pagination.js";
-import { transactionModel } from "../model/transaction.js";
 
 export async function addProduct(req, res) {
   try {
@@ -74,8 +73,6 @@ export async function getProduct(req, res) {
 export async function deleteProduct(req, res) {
   try {
     const product = await ProductModel.findByIdAndDelete(req.params.id);
-    await transactionModel.deleteMany({ product: req.params.id });
-
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
