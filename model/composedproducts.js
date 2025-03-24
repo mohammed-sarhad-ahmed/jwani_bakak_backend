@@ -14,6 +14,11 @@ const ComposedProductSchema = new mongoose.Schema(
       type: Number,
       required: [true, "the pricePerUnit must be provided"],
     },
+    exchange: {
+      type: mongoose.Types.ObjectId,
+      ref: "Exchange",
+      required: [true, "you must provide an Exchange rate"],
+    },
   },
   {
     timestamps: true,

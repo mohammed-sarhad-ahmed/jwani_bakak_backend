@@ -10,6 +10,7 @@ import invoiceRouter from "./controller/invoicecontroller.js";
 import uploadedInvoicesRouter from "./controller/uploadedInvoicesControler.js";
 import buyTransactionRouter from "./controller/buytransactioncontroller.js";
 import sellTransactionRouter from "./controller/selltransactioncontroller.js";
+import exchangeRoute from "./controller/exchange.js";
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use("/invoice", invoiceRouter);
 app.use("/uploadedInvoices", uploadedInvoicesRouter);
 app.use("/buyTransaction", buyTransactionRouter);
 app.use("/sellTransaction", sellTransactionRouter);
+app.use("/exchange", exchangeRoute);
 
 app.use(express.static("public"));
 

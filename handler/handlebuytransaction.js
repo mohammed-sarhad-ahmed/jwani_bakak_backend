@@ -1,5 +1,6 @@
 import BuyTransactionModel from "../model/buytransaction.js";
 import ComposedProductsModel from "../model/composedProducts.js";
+import exchangeModel from "../model/exchange.js";
 export async function addBuyTransaction(req, res) {
   try {
     const { composedProducts, ...others } = req.body;
@@ -8,12 +9,19 @@ export async function addBuyTransaction(req, res) {
     for (let i = 0; i < products.length; i++) {
       productIds[i] = products[i]._id;
     }
+    const exchange = await exchangeModel.findOne().sort({ createdAt: -1 });
     const buyTransaction = await BuyTransactionModel.create({
       products: productIds,
       ...others,
+      exchange: exchange._id,
     });
     await buyTransaction.populate("company");
-    await buyTransaction.populate("products");
+    await buyTransaction.populate({
+      path: "products",
+      populate: {
+        path: "exchange",
+      },
+    });
     res.status(200).json({
       status: "success",
       data: {
@@ -33,7 +41,12 @@ export async function getBuyTransactions(req, res) {
     const buyTransactions = await BuyTransactionModel.find({
       company: req.query.companyId,
     })
-      .populate("products")
+      .populate({
+        path: "products",
+        populate: {
+          path: "exchange",
+        },
+      })
       .populate("company");
 
     res.status(200).json({
@@ -52,7 +65,12 @@ export async function getBuyTransactions(req, res) {
 export async function getBuyTransaction(req, res) {
   try {
     const buyTransaction = await BuyTransactionModel.findById(req.params.id)
-      .populate("products")
+      .populate({
+        path: "products",
+        populate: {
+          path: "exchange",
+        },
+      })
       .populate("company");
 
     res.status(200).json({
@@ -95,7 +113,12 @@ export async function updateBuyTransaction(req, res) {
       }
     )
       .populate("company")
-      .populate("ComposedProduct");
+      .populate({
+        path: "products",
+        populate: {
+          path: "exchange",
+        },
+      });
     res.status(200).json({
       message: "success",
       data: {

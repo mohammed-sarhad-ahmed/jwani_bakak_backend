@@ -1,5 +1,7 @@
 import SellTransactionModel from "../model/selltransaction.js";
 import ComposedProductsModel from "../model/composedProducts.js";
+import exchangeModel from "../model/exchange.js";
+
 export async function addSellTransaction(req, res) {
   try {
     const { composedProducts, ...others } = req.body;
@@ -8,12 +10,19 @@ export async function addSellTransaction(req, res) {
     for (let i = 0; i < products.length; i++) {
       productIds[i] = products[i]._id;
     }
+    const exchange = await exchangeModel.findOne().sort({ createdAt: -1 });
     const sellTransaction = await SellTransactionModel.create({
       products: productIds,
       ...others,
+      exchange: exchange._id,
     });
     await sellTransaction.populate("company");
-    await sellTransaction.populate("products");
+    await sellTransaction.populate({
+      path: "products",
+      populate: {
+        path: "exchange",
+      },
+    });
     res.status(200).json({
       status: "success",
       data: {
@@ -33,7 +42,12 @@ export async function getSellTransactions(req, res) {
     const sellTransactions = await SellTransactionModel.find({
       company: req.query.companyId,
     })
-      .populate("products")
+      .populate({
+        path: "products",
+        populate: {
+          path: "exchange",
+        },
+      })
       .populate("company");
 
     res.status(200).json({
@@ -52,7 +66,12 @@ export async function getSellTransactions(req, res) {
 export async function getSellTransaction(req, res) {
   try {
     const sellTransaction = await SellTransactionModel.findById(req.params.id)
-      .populate("products")
+      .populate({
+        path: "products",
+        populate: {
+          path: "exchange",
+        },
+      })
       .populate("company");
 
     res.status(200).json({
@@ -95,7 +114,12 @@ export async function updateSellTransaction(req, res) {
       }
     )
       .populate("company")
-      .populate("ComposedProduct");
+      .populate({
+        path: "products",
+        populate: {
+          path: "exchange",
+        },
+      });
     res.status(200).json({
       message: "success",
       data: {
