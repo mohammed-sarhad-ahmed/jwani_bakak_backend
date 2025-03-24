@@ -108,11 +108,13 @@ export async function deleteCompany(req, res) {
       },
     });
     await ProductModel.deleteMany({ company: req.params.id });
+    await InvoiceModel.deleteMany({ company: req.params.id });
     await SellTransactionModel.deleteMany({ company: req.params.id });
     await BuyTransactionModel.deleteMany({ company: req.params.id });
     await UploadedInvoiceModel.deleteMany({
       company: req.params.id,
     });
+
     res.status(204).end();
   } catch (error) {
     res.status(400).json({
