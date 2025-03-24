@@ -6,6 +6,9 @@ import { fileURLToPath } from "url";
 import ProductModel from "../model/product.js";
 import InvoiceModel from "../model/invoice.js";
 import UploadedInvoiceModel from "../model/uploadedInvoices.js";
+import SellTransactionModel from "../model/selltransaction.js";
+import BuyTransactionModel from "../model/buytransaction.js";
+import composedProducts from "../model/composedProducts.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +29,6 @@ export async function addCompany(req, res) {
       },
     });
   } catch (error) {
-    await fs.unlink(req.file.fileName);
     res.status(400).json({
       status: "fail",
       message: error.message,
@@ -93,8 +95,21 @@ export async function deleteCompany(req, res) {
 
       await fs.unlink(filePath);
     }
+    const products = await ProductModel.find({
+      company: req.params.id,
+    });
+    const productIds = [];
+    for (let index = 0; index < products.length; index++) {
+      productIds[index] = products[index].id;
+    }
+    await composedProducts.deleteMany({
+      product: {
+        $in: productIds,
+      },
+    });
     await ProductModel.deleteMany({ company: req.params.id });
-    await InvoiceModel.deleteMany({ company: req.params.id });
+    await SellTransactionModel.deleteMany({ company: req.params.id });
+    await BuyTransactionModel.deleteMany({ company: req.params.id });
     await UploadedInvoiceModel.deleteMany({
       company: req.params.id,
     });

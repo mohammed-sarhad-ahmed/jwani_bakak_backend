@@ -7,14 +7,8 @@ const invoiceSchema = new mongoose.Schema(
       ref: "Company",
       required: [true, "you must provide an companyId"],
     },
-    transactions: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "Transaction",
-          required: [true, "you must provide a transactionId"],
-        },
-      ],
+    transaction: {
+      type: mongoose.Types.ObjectId,
       required: [true, "you must provide transactions"],
     },
     addressedTo: {
