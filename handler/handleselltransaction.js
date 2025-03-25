@@ -1,16 +1,11 @@
 import SellTransactionModel from "../model/selltransaction.js";
-import ComposedProductsModel from "../model/composedProducts.js";
 
 export async function addSellTransaction(req, res) {
   try {
-    const { products: composedProducts, ...others } = req.body;
-    const products = await ComposedProductsModel.insertMany(composedProducts);
-    let productIds = [];
-    for (let i = 0; i < products.length; i++) {
-      productIds[i] = products[i]._id;
-    }
+    const { products, ...others } = req.body;
+
     const sellTransaction = await SellTransactionModel.create({
-      products: productIds,
+      products,
       ...others,
     });
     await sellTransaction.populate("company");
