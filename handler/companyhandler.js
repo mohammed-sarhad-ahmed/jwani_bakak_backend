@@ -93,7 +93,7 @@ export async function deleteCompany(req, res) {
     });
     const productIds = [];
     for (let index = 0; index < products.length; index++) {
-      productIds[index] = products[index].id;
+      productIds[index] = products[index]._id;
     }
     await composedProducts.deleteMany({
       product: {
