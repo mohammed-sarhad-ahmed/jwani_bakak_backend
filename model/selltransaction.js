@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Exchange from "./exchange.js";
 
 const sellTransaction = new mongoose.Schema(
   {
@@ -36,14 +35,5 @@ const sellTransaction = new mongoose.Schema(
     timestamps: true,
   }
 );
-sellTransaction.pre("save", async function (next) {
-  if (this.isNew) {
-    const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
-    if (latestExchange) {
-      this.exchangeRate = latestExchange._id;
-    }
-  }
-  next();
-});
 
 export default mongoose.model("SellTransaction", sellTransaction);

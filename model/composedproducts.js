@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import Exchange from "./exchange.js";
+
 const ComposedProductSchema = new mongoose.Schema(
   {
     product: {
@@ -24,5 +26,15 @@ const ComposedProductSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+ComposedProductSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
+    if (latestExchange) {
+      this.exchangeRate = latestExchange._id;
+    }
+  }
+  next();
+});
 
 export default mongoose.model("ComposedProduct", ComposedProductSchema);

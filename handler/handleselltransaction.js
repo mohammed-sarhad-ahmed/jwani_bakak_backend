@@ -1,6 +1,5 @@
 import SellTransactionModel from "../model/selltransaction.js";
 import ComposedProductsModel from "../model/composedProducts.js";
-import exchangeModel from "../model/exchange.js";
 
 export async function addSellTransaction(req, res) {
   try {

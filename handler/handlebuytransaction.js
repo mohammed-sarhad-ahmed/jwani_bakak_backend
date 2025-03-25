@@ -1,6 +1,5 @@
 import BuyTransactionModel from "../model/buytransaction.js";
 import ComposedProductsModel from "../model/composedProducts.js";
-import exchangeModel from "../model/exchange.js";
 export async function addBuyTransaction(req, res) {
   try {
     const { products: composedProducts, ...others } = req.body;

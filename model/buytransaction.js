@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Exchange from "./exchange.js";
 
 const buyTransaction = new mongoose.Schema(
   {
@@ -48,15 +47,6 @@ const buyTransaction = new mongoose.Schema(
     timestamps: true,
   }
 );
-buyTransaction.pre("save", async function (next) {
-  if (this.isNew) {
-    const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
-    if (latestExchange) {
-      this.exchangeRate = latestExchange._id;
-    }
-  }
-  next();
-});
 
 buyTransaction.post("findOneAndDelete", async function (doc, next) {
   try {
