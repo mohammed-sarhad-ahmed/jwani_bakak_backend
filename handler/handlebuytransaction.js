@@ -3,7 +3,7 @@ import ComposedProductsModel from "../model/composedProducts.js";
 import exchangeModel from "../model/exchange.js";
 export async function addBuyTransaction(req, res) {
   try {
-    const { composedProducts, ...others } = req.body;
+    const { products: composedProducts, ...others } = req.body;
     const products = await ComposedProductsModel.create(composedProducts);
     let productIds = [];
     for (let i = 0; i < products.length; i++) {
