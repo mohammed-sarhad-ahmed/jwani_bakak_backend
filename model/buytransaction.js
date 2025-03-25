@@ -15,6 +15,18 @@ const buyTransaction = new mongoose.Schema(
       type: String,
       required: true,
     },
+    expenses: [
+      {
+        name: {
+          type: String,
+          required: [true, "the name of the expense should be provided"],
+        },
+        amount: {
+          type: Number,
+          required: [true, "the amount of the expense should be provided"],
+        },
+      },
+    ],
     products: {
       type: [
         {
