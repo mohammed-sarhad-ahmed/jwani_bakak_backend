@@ -27,14 +27,11 @@ const ComposedProductSchema = new mongoose.Schema(
   }
 );
 
-ComposedProductSchema.pre("insertMany", async function (next) {
-  console.log(1);
-  if (this.isNew) {
-    const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
-    if (latestExchange) {
-      this.exchangeRate = latestExchange._id;
-    }
-  }
+ComposedProductSchema.pre("insertMany", async function (next, docs) {
+  const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
+  docs.forEach((doc) => {
+    doc.exchange = latestExchange._id;
+  });
   next();
 });
 

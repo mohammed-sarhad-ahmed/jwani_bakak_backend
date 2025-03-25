@@ -3,7 +3,7 @@ import ComposedProductsModel from "../model/composedProducts.js";
 export async function addBuyTransaction(req, res) {
   try {
     const { products: composedProducts, ...others } = req.body;
-    const products = await ComposedProductsModel.create(composedProducts);
+    const products = await ComposedProductsModel.insertMany(composedProducts);
     let productIds = [];
     for (let i = 0; i < products.length; i++) {
       productIds[i] = products[i]._id;
