@@ -16,6 +16,22 @@ export async function getExchange(req, res) {
     });
   }
 }
+export async function getCurrent(req, res) {
+  try {
+    const exchange = await exchangeModel.findOne().limit(1);
+    res.status(200).send({
+      message: "success",
+      data: {
+        exchange,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+}
 
 export async function setExchange(req, res) {
   try {
