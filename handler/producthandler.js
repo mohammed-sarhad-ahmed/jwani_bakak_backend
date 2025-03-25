@@ -22,19 +22,10 @@ export async function addProduct(req, res) {
 
 export async function getProducts(req, res) {
   try {
-    const { page = 1, limit = 10, companyId } = req.query;
-    const skip = pagination(page, limit);
-    if (req.query.page) {
-      const numberProducts = await ProductModel.countDocuments();
-      if (skip >= numberProducts && numberProducts !== 0)
-        throw new Error("the page was not found");
-    }
+    const { companyId } = req.query;
     const products = await ProductModel.find({
       company: companyId,
-    })
-      .populate("company")
-      .skip(skip)
-      .limit(limit);
+    }).populate("company");
 
     res.status(200).json({
       status: "success",

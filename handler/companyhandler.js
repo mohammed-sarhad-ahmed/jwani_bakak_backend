@@ -38,14 +38,7 @@ export async function addCompany(req, res) {
 
 export async function getCompanies(req, res) {
   try {
-    const { page = 1, limit = 10 } = req.query;
-    const skip = pagination(page, limit);
-    if (req.query.page) {
-      const numberOfCompanies = await CompanyModel.countDocuments();
-      if (skip >= numberOfCompanies && numberOfCompanies !== 0)
-        throw new Error("the page was not found");
-    }
-    const companies = await CompanyModel.find().skip(skip).limit(limit);
+    const companies = await CompanyModel.find();
     res.status(200).json({
       status: "success",
       results: companies.length,
