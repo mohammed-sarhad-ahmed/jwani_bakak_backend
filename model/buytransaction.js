@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Exchange from "./exchange.js";
 
 const buyTransaction = new mongoose.Schema(
   {
@@ -47,7 +48,17 @@ const buyTransaction = new mongoose.Schema(
     timestamps: true,
   }
 );
-buyTransaction.post("findOneAndDelete", async function (doc) {
+buyTransaction.pre("save", async function (next) {
+  if (this.isNew) {
+    const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
+    if (latestExchange) {
+      this.exchangeRate = latestExchange.rate;
+    }
+  }
+  next();
+});
+
+buyTransaction.post("findOneAndDelete", async function (doc, next) {
   try {
     const composedProductsToDelete = doc.products;
     if (composedProductsToDelete && composedProductsToDelete.length > 0) {
@@ -57,6 +68,8 @@ buyTransaction.post("findOneAndDelete", async function (doc) {
     }
   } catch (error) {
     console.error("Error deleting composed products:", error);
+  } finally {
+    next();
   }
 });
 export default mongoose.model("BuyTransaction", buyTransaction);

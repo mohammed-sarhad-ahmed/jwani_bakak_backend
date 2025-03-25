@@ -10,11 +10,9 @@ export async function addSellTransaction(req, res) {
     for (let i = 0; i < products.length; i++) {
       productIds[i] = products[i]._id;
     }
-    const exchange = await exchangeModel.findOne().sort({ createdAt: -1 });
     const sellTransaction = await SellTransactionModel.create({
       products: productIds,
       ...others,
-      exchange: exchange._id,
     });
     await sellTransaction.populate("company");
     await sellTransaction.populate({
