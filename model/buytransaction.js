@@ -52,7 +52,7 @@ buyTransaction.pre("save", async function (next) {
   if (this.isNew) {
     const latestExchange = await Exchange.findOne().sort({ createdAt: -1 });
     if (latestExchange) {
-      this.exchangeRate = latestExchange.rate;
+      this.exchangeRate = latestExchange._id;
     }
   }
   next();
