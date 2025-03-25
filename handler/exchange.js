@@ -18,7 +18,7 @@ export async function getExchange(req, res) {
 }
 export async function getCurrent(req, res) {
   try {
-    const exchange = await exchangeModel.findOne().limit(1);
+    const exchange = await exchangeModel.findOne().sort("-createdAt");
     res.status(200).send({
       message: "success",
       data: {
