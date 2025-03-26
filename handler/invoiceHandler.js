@@ -90,10 +90,14 @@ export async function deleteInvoice(req, res) {
 
 export async function updateInvoice(req, res) {
   try {
-    const invoice = await InvoiceModel.updateOne(req.body, req.params.id, {
-      new: true,
-      runValidators: true,
-    })
+    const invoice = await InvoiceModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
       .populate({
         path: "transaction",
         populate: {

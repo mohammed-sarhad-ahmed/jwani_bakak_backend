@@ -143,7 +143,7 @@ export async function updateComposed(req, res) {
         productsId[i] = products[i]._id;
       }
     }
-    const buyTransaction = await BuyTransactionModel.findByIdAndUpdate(
+    const sellTransaction = await SellTransactionModel.findByIdAndUpdate(
       req.params.id,
       {
         products: productsId,
@@ -156,7 +156,7 @@ export async function updateComposed(req, res) {
     res.status(200).send({
       message: "success",
       data: {
-        buyTransaction,
+        sellTransaction,
       },
     });
   } catch (error) {
