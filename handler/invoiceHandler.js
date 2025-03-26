@@ -3,12 +3,13 @@ import InvoiceModel from "../model/invoice.js";
 export async function addInvoice(req, res) {
   try {
     const invoice = await InvoiceModel.create(req.body);
-    await InvoiceModel.populate("transaction");
-    await InvoiceModel.populate("company");
+    const copyInvoice = await InvoiceModel.findById(invoice._id)
+      .populate("company")
+      .populate("transaction");
     res.status(200).send({
       message: "success",
       data: {
-        invoice,
+        invoice: copyInvoice,
       },
     });
   } catch (error) {
