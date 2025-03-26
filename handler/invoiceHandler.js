@@ -22,7 +22,9 @@ export async function getInvoices(req, res) {
   try {
     const invoices = await InvoiceModel.find({
       company: req.query.companyId,
-    });
+    })
+      .populate("transaction")
+      .populate("company");
     res.status(200).send({
       message: "success",
       data: {
@@ -39,7 +41,9 @@ export async function getInvoices(req, res) {
 
 export async function getInvoice(req, res) {
   try {
-    const invoice = await InvoiceModel.findById(req.params.id);
+    const invoice = await InvoiceModel.findById(req.params.id)
+      .populate("transaction")
+      .populate("company");
     res.status(200).send({
       message: "success",
       data: {
@@ -73,7 +77,9 @@ export async function updateInvoice(req, res) {
     const invoice = await InvoiceModel.updateOne(req.body, req.params.id, {
       new: true,
       runValidators: true,
-    });
+    })
+      .populate("transaction")
+      .populate("company");
     res.status(200).send({
       message: "success",
       data: {
