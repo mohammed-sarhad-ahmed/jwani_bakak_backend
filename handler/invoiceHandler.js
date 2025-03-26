@@ -5,7 +5,12 @@ export async function addInvoice(req, res) {
     const invoice = await InvoiceModel.create(req.body);
     const copyInvoice = await InvoiceModel.findById(invoice._id)
       .populate("company")
-      .populate("transaction");
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "products",
+        },
+      });
     res.status(200).send({
       message: "success",
       data: {
@@ -24,7 +29,12 @@ export async function getInvoices(req, res) {
     const invoices = await InvoiceModel.find({
       company: req.query.companyId,
     })
-      .populate("transaction")
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "products",
+        },
+      })
       .populate("company");
     res.status(200).send({
       message: "success",
@@ -43,7 +53,12 @@ export async function getInvoices(req, res) {
 export async function getInvoice(req, res) {
   try {
     const invoice = await InvoiceModel.findById(req.params.id)
-      .populate("transaction")
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "products",
+        },
+      })
       .populate("company");
     res.status(200).send({
       message: "success",
@@ -79,7 +94,12 @@ export async function updateInvoice(req, res) {
       new: true,
       runValidators: true,
     })
-      .populate("transaction")
+      .populate({
+        path: "transaction",
+        populate: {
+          path: "products",
+        },
+      })
       .populate("company");
     res.status(200).send({
       message: "success",
