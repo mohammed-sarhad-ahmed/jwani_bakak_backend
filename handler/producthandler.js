@@ -1,5 +1,4 @@
 import ProductModel from "../model/product.js";
-import { pagination } from "../helper/pagination.js";
 
 export async function addProduct(req, res) {
   try {
