@@ -5,6 +5,7 @@ import {
   deleteBuyTransaction,
   getBuyTransaction,
   getBuyTransactions,
+  updateComposed,
 } from "../handler/handlebuytransaction.js";
 
 const router = express.Router();
@@ -14,4 +15,6 @@ router
   .get(getBuyTransaction)
   .delete(deleteBuyTransaction)
   .patch(updateBuyTransaction);
+
+router.route("/composed/:id").patch(updateComposed);
 export default router;

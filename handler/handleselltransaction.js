@@ -130,3 +130,39 @@ export async function updateSellTransaction(req, res) {
     });
   }
 }
+
+export async function updateComposed(req, res) {
+  try {
+    const products = req.body;
+    const productsId = [];
+    for (let i = 0; i < products.length; i++) {
+      const product = await ComposedProductsModel.findById(products[i]._id);
+      if (product) {
+        product.pricePerUnit = products[i].pricePerUnit;
+        product.quantity = products[i].quantity;
+        productsId[i] = products[i]._id;
+      }
+    }
+    const buyTransaction = await BuyTransactionModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        products: productsId,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).send({
+      message: "success",
+      data: {
+        buyTransaction,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+}
