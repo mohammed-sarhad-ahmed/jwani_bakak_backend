@@ -133,13 +133,14 @@ export async function updateSellTransaction(req, res) {
 
 export async function updateComposed(req, res) {
   try {
-    const products = req.body;
+    const { products } = req.body;
     const productsId = [];
     for (let i = 0; i < products.length; i++) {
       const product = await ComposedProductsModel.findById(products[i]._id);
       if (product) {
         product.pricePerUnit = products[i].pricePerUnit;
         product.quantity = products[i].quantity;
+        await product.save();
         productsId[i] = products[i]._id;
       }
     }
