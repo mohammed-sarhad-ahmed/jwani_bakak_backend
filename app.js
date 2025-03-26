@@ -80,9 +80,9 @@ app.all("*", (req, res) => {
   });
 });
 
-//mongodb+srv://paiwast:123@cluster0.obnne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
-await mongoose.connect("mongodb://localhost:27017/jwani_balak");
+await mongoose.connect(
+  "mongodb+srv://paiwast:123@cluster0.obnne.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+);
 
 app.listen(8085, "0.0.0.0", () => {
   console.log("server has started at port 8085");
