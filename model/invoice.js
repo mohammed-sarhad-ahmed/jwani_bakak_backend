@@ -7,9 +7,15 @@ const invoiceSchema = new mongoose.Schema(
       ref: "Company",
       required: [true, "you must provide an companyId"],
     },
+    type: {
+      type: String,
+      enum: ["BuyTransaction", "SellTransaction"],
+      required: true,
+    },
     transaction: {
-      type: mongoose.Types.ObjectId,
-      required: [true, "you must provide transactions"],
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      refPath: "type",
     },
     addressedTo: {
       type: String,
