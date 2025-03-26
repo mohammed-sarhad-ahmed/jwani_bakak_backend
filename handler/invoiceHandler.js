@@ -77,7 +77,7 @@ export async function getInvoice(req, res) {
 export async function deleteInvoice(req, res) {
   try {
     await InvoiceModel.deleteOne({
-      _id: req.params._id,
+      _id: req.params.id,
     });
     res.status(204).end();
   } catch (error) {
