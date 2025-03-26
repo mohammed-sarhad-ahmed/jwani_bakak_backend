@@ -5,6 +5,7 @@ import {
   deleteSellTransaction,
   getSellTransaction,
   getSellTransactions,
+  updateComposed,
 } from "../handler/handleselltransaction.js";
 
 const router = express.Router();
@@ -14,4 +15,7 @@ router
   .get(getSellTransaction)
   .delete(deleteSellTransaction)
   .patch(updateSellTransaction);
+
+router.route("/composed/:id").patch(updateComposed);
+
 export default router;
