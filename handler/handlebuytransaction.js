@@ -101,7 +101,7 @@ export async function deleteBuyTransaction(req, res) {
 
 export async function updateBuyTransaction(req, res) {
   try {
-    const product = await ProductModel.findByIdAndUpdate(
+    const buyTransaction = await BuyTransactionModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       {
@@ -119,7 +119,7 @@ export async function updateBuyTransaction(req, res) {
     res.status(200).json({
       message: "success",
       data: {
-        product,
+        buyTransaction,
       },
     });
   } catch (error) {
